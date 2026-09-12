@@ -142,6 +142,22 @@
       y: 0, opacity: 1, duration: 0.9, ease: "power3.out", stagger: 0.1, delay: 0.55
     });
 
+    // hero growth graph: draw the line, then pop the labels/dots in
+    var graphLine = document.querySelector(".graph-line");
+    if (graphLine) {
+      gsap.set(graphLine, { strokeDashoffset: 100 });
+      gsap.set(".graph-fill", { opacity: 0 });
+      gsap.set(".graph-dot", { scale: 0, transformOrigin: "center" });
+      gsap.set(".hero-graph-label", { y: 12, opacity: 0 });
+
+      var graphTl = gsap.timeline({ delay: 0.9 });
+      graphTl
+        .to(graphLine, { strokeDashoffset: 0, duration: 1.6, ease: "power2.out" })
+        .to(".graph-fill", { opacity: 1, duration: 0.6 }, "-=0.4")
+        .to(".graph-dot", { scale: 1, duration: 0.5, ease: "back.out(3)", stagger: 0.12 }, "-=0.6")
+        .to(".hero-graph-label", { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", stagger: 0.12 }, "-=0.5");
+    }
+
     // counters
     document.querySelectorAll("[data-count-to]").forEach(function (el) {
       var target = parseFloat(el.getAttribute("data-count-to"));

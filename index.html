@@ -84,6 +84,31 @@
         <span class="chip"><strong>+250%</strong> search visibility</span>
       </div>
     </div>
+
+    <div class="wrap hero-graph-wrap">
+      <svg class="hero-graph" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="graphLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--blue)"/>
+            <stop offset="100%" stop-color="var(--gold-bright)"/>
+          </linearGradient>
+          <linearGradient id="graphFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path class="graph-fill" d="M0,210 C140,205 180,150 320,140 C480,128 520,95 650,70 C760,50 840,45 1000,10 L1000,260 L0,260 Z" fill="url(#graphFill)"/>
+        <path class="graph-line" pathLength="100" d="M0,210 C140,205 180,150 320,140 C480,128 520,95 650,70 C760,50 840,45 1000,10" fill="none" stroke="url(#graphLine)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="graph-dot" cx="320" cy="140" r="5"/>
+        <circle class="graph-dot" cx="650" cy="70" r="5"/>
+        <circle class="graph-dot" cx="1000" cy="10" r="6"/>
+      </svg>
+      <div class="hero-graph-labels" data-reveal-group>
+        <div class="hero-graph-label" style="left:32%;"><strong>+320%</strong><span>Organic growth</span></div>
+        <div class="hero-graph-label" style="left:65%;"><strong>+180%</strong><span>Qualified leads</span></div>
+        <div class="hero-graph-label" style="left:94%;"><strong>+250%</strong><span>Search visibility</span></div>
+      </div>
+    </div>
   </section>
 
   <div class="marquee" aria-hidden="true">
