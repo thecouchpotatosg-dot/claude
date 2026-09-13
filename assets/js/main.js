@@ -154,46 +154,74 @@
     });
   }
 
-  /* ---------- scroll reveals (punchier: scale + rotate + overshoot) ---------- */
+  /* ---------- scroll reveals (smooth, slight overshoot) ---------- */
   if (hasGSAP && window.ScrollTrigger && !reduced) {
     document.querySelectorAll("[data-reveal]").forEach(function (el) {
-      gsap.set(el, { y: 40, opacity: 0, scale: 0.94, rotate: -1.5 });
+      gsap.set(el, { y: 36, opacity: 0, scale: 0.97 });
       gsap.to(el, {
-        y: 0, opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(1.7)",
+        y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.15)",
         scrollTrigger: { trigger: el, start: "top 88%" }
       });
     });
 
     document.querySelectorAll("[data-reveal-group]").forEach(function (group) {
       var items = group.children;
-      gsap.set(items, { y: 40, opacity: 0, scale: 0.9, rotate: -2 });
+      gsap.set(items, { y: 36, opacity: 0, scale: 0.96 });
       gsap.to(items, {
-        y: 0, opacity: 1, scale: 1, rotate: 0, duration: 0.6, ease: "back.out(1.8)", stagger: 0.08,
+        y: 0, opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.2)", stagger: 0.08,
         scrollTrigger: { trigger: group, start: "top 88%" }
       });
     });
 
     // hero line reveal on load, not scroll
     document.querySelectorAll(".hero h1 .line").forEach(function (line, i) {
-      gsap.set(line, { yPercent: 120, rotate: 3 });
-      gsap.to(line, { yPercent: 0, rotate: 0, duration: 0.9, ease: "power4.out", delay: 0.1 + i * 0.08 });
+      gsap.set(line, { yPercent: 120 });
+      gsap.to(line, { yPercent: 0, duration: 0.9, ease: "power4.out", delay: 0.1 + i * 0.08 });
     });
     gsap.set([".hero-lede", ".hero-actions", ".hero-chips"], { y: 24, opacity: 0 });
     gsap.to([".hero-lede", ".hero-actions", ".hero-chips"], {
-      y: 0, opacity: 1, duration: 0.7, ease: "back.out(1.7)", stagger: 0.1, delay: 0.45
+      y: 0, opacity: 1, duration: 0.8, ease: "power3.out", stagger: 0.1, delay: 0.45
     });
 
-    // stickers: pop in with rotation after headline
-    var stickers = document.querySelectorAll(".sticker");
-    if (stickers.length) {
-      gsap.set(stickers, { scale: 0, opacity: 0 });
-      gsap.to(stickers, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(2.4)", stagger: 0.1, delay: 0.7 });
-    }
     var seal = document.querySelector(".hero-seal");
     if (seal) {
-      gsap.set(seal, { scale: 0, opacity: 0, rotate: -30 });
-      gsap.to(seal, { scale: 1, opacity: 1, rotate: 0, duration: 0.8, ease: "back.out(2)", delay: 0.5 });
+      gsap.set(seal, { scale: 0, opacity: 0 });
+      gsap.to(seal, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.4)", delay: 0.5 });
     }
+
+    /* ---------- continuous scroll-linked parallax ---------- */
+    // background orbs drift as you scroll past each section (not just once)
+    document.querySelectorAll(".aurora").forEach(function (el, i) {
+      var dir = i % 2 === 0 ? 1 : -1;
+      gsap.to(el, {
+        y: 120 * dir,
+        x: 40 * dir,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el.closest("section") || el.parentElement,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+    });
+
+    // hero content settles back and fades slightly as the page scrolls away from it
+    var heroCopy = document.querySelector(".hero-copy");
+    if (heroCopy) {
+      gsap.to(heroCopy, {
+        y: -60, opacity: 0.4, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.6 }
+      });
+    }
+
+    // the marquee bands drift slightly faster/slower than scroll for depth
+    document.querySelectorAll(".marquee").forEach(function (el, i) {
+      gsap.to(el, {
+        xPercent: i % 2 === 0 ? -4 : 4, ease: "none",
+        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 }
+      });
+    });
 
     // hero growth graph: draw the line, then pop the labels/dots in
     var graphLine = document.querySelector(".graph-line");
