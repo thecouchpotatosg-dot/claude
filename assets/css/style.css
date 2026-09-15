@@ -1,41 +1,41 @@
 /* =========================================================
-   TRUE MARKETING — brand system: "premium proof"
-   Back to the site's real palette (white / #0C65ED blue /
-   dark ink, red used only as a rare accent) but built like a
-   modern AI-product landing page: soft elevated cards, blue
-   gradient glow, and motion that runs continuously with
-   scroll — not just reveal-once — plus a heavier reveal layer
-   across many more pages.
+   TRUE MARKETING — brand system: "red alert"
+   Red / white / ink, using the site's own accent red as the
+   lead color this time. Same soft-elevated premium card
+   language as before (not neubrutalist), but pushed toward
+   a much louder, near-constant motion system: more things
+   drifting, spinning and pulsing, on every page, all the
+   time — not just on entrance.
    ========================================================= */
 
 :root {
   --bg: #FFFFFF;
-  --bg-soft: #F4F7FF;
-  --bg-soft-2: #E8EFFF;
+  --bg-soft: #FFF5F3;
+  --bg-soft-2: #FFE7E1;
 
-  --ink: #14171F;
-  --muted: #5B6270;
-  --muted-soft: #8890A0;
+  --ink: #1A1210;
+  --muted: #665A56;
+  --muted-soft: #948682;
 
-  --line: rgba(20, 23, 31, 0.09);
-  --line-strong: rgba(20, 23, 31, 0.16);
+  --line: rgba(26, 18, 16, 0.10);
+  --line-strong: rgba(26, 18, 16, 0.18);
 
-  --blue: #0C65ED;
-  --blue-bright: #2F7DFF;
-  --blue-deep: #0A4FC0;
-  --blue-tint: #DCE8FF;
-  --blue-glow: rgba(12, 101, 237, 0.20);
+  --blue: #EA2300;
+  --blue-bright: #FF4B26;
+  --blue-deep: #B81900;
+  --blue-tint: #FFD9D1;
+  --blue-glow: rgba(234, 35, 0, 0.22);
 
-  --red: #EA2300;
-  --red-glow: rgba(234, 35, 0, 0.14);
+  --red: #7A1200;
+  --red-glow: rgba(122, 18, 0, 0.20);
 
   --radius-s: 10px;
   --radius-m: 18px;
   --radius-l: 28px;
 
-  --shadow-sm: 0 1px 2px rgba(20,23,31,0.06), 0 10px 24px -12px rgba(20,23,31,0.16);
-  --shadow-md: 0 8px 16px -6px rgba(20,23,31,0.10), 0 30px 60px -20px rgba(12,101,237,0.28);
-  --shadow-lift: 0 14px 26px -10px rgba(20,23,31,0.16), 0 40px 70px -24px rgba(12,101,237,0.32);
+  --shadow-sm: 0 1px 2px rgba(26,18,16,0.07), 0 10px 24px -12px rgba(26,18,16,0.18);
+  --shadow-md: 0 8px 16px -6px rgba(26,18,16,0.12), 0 30px 60px -20px rgba(234,35,0,0.30);
+  --shadow-lift: 0 14px 26px -10px rgba(26,18,16,0.18), 0 40px 70px -24px rgba(234,35,0,0.36);
 
   --font-display: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -180,6 +180,12 @@ p { margin: 0; }
 }
 .btn-gold { background: linear-gradient(135deg, var(--blue-bright), var(--blue-deep)); color: #fff; box-shadow: var(--shadow-sm); }
 .btn-gold:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.btn-gold.pulse { animation: btn-pulse 2.2s ease-in-out infinite; }
+.btn-gold.pulse:hover { animation-play-state: paused; }
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: var(--shadow-sm), 0 0 0 0 var(--blue-glow); }
+  50% { box-shadow: var(--shadow-sm), 0 0 0 12px rgba(234,35,0,0); }
+}
 .btn-line { background: #fff; color: var(--ink); border-color: var(--line-strong); }
 .btn-line:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
 .btn-blue { background: var(--ink); color: #fff; }
@@ -220,7 +226,8 @@ p { margin: 0; }
 .header-row { display: flex; align-items: center; gap: 30px; }
 
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); margin-right: auto; }
-.brand-mark { color: var(--blue); flex: none; }
+.brand-mark { color: var(--blue); flex: none; animation: mark-pulse 2.6s ease-in-out infinite; }
+@keyframes mark-pulse { 0%, 100% { scale: 1; } 50% { scale: 1.12; } }
 .brand-word { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; }
 .brand-word em { font-style: normal; font-weight: 400; color: var(--muted); }
 
@@ -314,10 +321,25 @@ p { margin: 0; }
   color: var(--muted-soft);
 }
 .hero-seal svg { width: 100%; height: 100%; }
-.hero-seal .seal-ring { animation: spin 20s linear infinite; transform-origin: center; }
+.hero-seal .seal-ring { animation: spin 8s linear infinite; transform-origin: center; }
 .hero-seal .seal-check { color: var(--blue); }
+.hero-seal { animation: bob 3s ease-in-out infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+/* uses the standalone `translate` property (not `transform`) so it composes
+   cleanly with the GSAP entrance tween, which animates `transform` (scale) */
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
 @media (max-width: 900px) { .hero-seal { display: none; } }
+
+/* -------- scroll cue -------- */
+.scroll-cue {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted-soft); z-index: 2;
+}
+.scroll-cue span { width: 1px; height: 30px; background: linear-gradient(var(--blue), transparent); animation: cue-drop 1.6s ease-in-out infinite; }
+@keyframes cue-drop { 0% { transform: scaleY(0); transform-origin: top; opacity: 1; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; opacity: 0.4; } }
+@media (max-width: 700px) { .scroll-cue { display: none; } }
 
 /* -------- hero growth graph -------- */
 .hero-graph-wrap { position: relative; margin-top: 56px; height: clamp(140px, 22vw, 240px); }
@@ -355,7 +377,7 @@ p { margin: 0; }
   white-space: nowrap;
   background: var(--bg-soft);
 }
-.marquee-track { display: inline-flex; gap: 44px; animation: scroll-left 24s linear infinite; }
+.marquee-track { display: inline-flex; gap: 44px; animation: scroll-left 11s linear infinite; }
 .marquee-track span {
   font-family: var(--font-mono); font-weight: 500; font-size: 0.92rem; letter-spacing: 0.04em;
   color: var(--muted); display: inline-flex; align-items: center; gap: 44px; text-transform: uppercase;
@@ -538,7 +560,15 @@ p { margin: 0; }
 .cta-banner::before {
   content: ""; position: absolute; inset: 0; margin: auto; width: 60%; aspect-ratio: 1;
   background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%); filter: blur(70px);
+  animation: blob-drift 7s ease-in-out infinite;
 }
+@keyframes blob-drift { 0%, 100% { translate: -6% -4%; } 50% { translate: 6% 4%; } }
+.cta-banner::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -30%; width: 30%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.22), transparent);
+  animation: shimmer-sweep 3.2s ease-in-out infinite;
+}
+@keyframes shimmer-sweep { 0% { left: -30%; } 100% { left: 120%; } }
 .cta-banner > * { position: relative; }
 .cta-banner .eyebrow { justify-content: center; color: rgba(255,255,255,0.85); }
 .cta-banner .eyebrow::before { background: #fff; }

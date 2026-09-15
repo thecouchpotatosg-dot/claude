@@ -154,22 +154,22 @@
     });
   }
 
-  /* ---------- scroll reveals (smooth, slight overshoot) ---------- */
+  /* ---------- scroll reveals (punchy, faster) ---------- */
   if (hasGSAP && window.ScrollTrigger && !reduced) {
     document.querySelectorAll("[data-reveal]").forEach(function (el) {
-      gsap.set(el, { y: 36, opacity: 0, scale: 0.97 });
+      gsap.set(el, { y: 46, opacity: 0, scale: 0.93, rotate: -1.2 });
       gsap.to(el, {
-        y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.15)",
-        scrollTrigger: { trigger: el, start: "top 88%" }
+        y: 0, opacity: 1, scale: 1, rotate: 0, duration: 0.65, ease: "back.out(1.6)",
+        scrollTrigger: { trigger: el, start: "top 90%" }
       });
     });
 
     document.querySelectorAll("[data-reveal-group]").forEach(function (group) {
       var items = group.children;
-      gsap.set(items, { y: 36, opacity: 0, scale: 0.96 });
+      gsap.set(items, { y: 46, opacity: 0, scale: 0.9, rotate: -2 });
       gsap.to(items, {
-        y: 0, opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.2)", stagger: 0.08,
-        scrollTrigger: { trigger: group, start: "top 88%" }
+        y: 0, opacity: 1, scale: 1, rotate: 0, duration: 0.55, ease: "back.out(1.7)", stagger: 0.06,
+        scrollTrigger: { trigger: group, start: "top 90%" }
       });
     });
 
@@ -190,35 +190,43 @@
     }
 
     /* ---------- continuous scroll-linked parallax ---------- */
-    // background orbs drift as you scroll past each section (not just once)
+    // background orbs drift + rotate as you scroll past each section (not just once)
     document.querySelectorAll(".aurora").forEach(function (el, i) {
       var dir = i % 2 === 0 ? 1 : -1;
       gsap.to(el, {
-        y: 120 * dir,
-        x: 40 * dir,
+        y: 220 * dir,
+        x: 90 * dir,
+        rotate: 40 * dir,
         ease: "none",
         scrollTrigger: {
           trigger: el.closest("section") || el.parentElement,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1
+          scrub: 0.6
         }
       });
     });
 
     // hero content settles back and fades slightly as the page scrolls away from it
-    var heroCopy = document.querySelector(".hero-copy");
-    if (heroCopy) {
-      gsap.to(heroCopy, {
-        y: -60, opacity: 0.4, ease: "none",
-        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.6 }
+    document.querySelectorAll(".hero-copy, .page-hero .wrap").forEach(function (el) {
+      gsap.to(el, {
+        y: -70, opacity: 0.35, ease: "none",
+        scrollTrigger: { trigger: el.closest(".hero, .page-hero"), start: "top top", end: "bottom top", scrub: 0.5 }
       });
-    }
+    });
 
-    // the marquee bands drift slightly faster/slower than scroll for depth
+    // the marquee bands drift faster/slower than scroll for depth, in alternating directions
     document.querySelectorAll(".marquee").forEach(function (el, i) {
       gsap.to(el, {
-        xPercent: i % 2 === 0 ? -4 : 4, ease: "none",
+        xPercent: i % 2 === 0 ? -6 : 6, ease: "none",
+        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.6 }
+      });
+    });
+
+    // section eyebrows/kickers rotate slightly in and out as they cross the viewport
+    document.querySelectorAll(".eyebrow").forEach(function (el) {
+      gsap.fromTo(el, { rotate: -3 }, {
+        rotate: 3, ease: "none",
         scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 }
       });
     });
@@ -239,7 +247,7 @@
         .to(".hero-graph-label", { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.12 }, "-=0.4");
     }
 
-    // counters
+    // counters — count up, then keep a slow perpetual "breathing" pulse
     document.querySelectorAll("[data-count-to]").forEach(function (el) {
       var target = parseFloat(el.getAttribute("data-count-to"));
       var prefix = el.getAttribute("data-count-prefix") || "";
@@ -247,11 +255,14 @@
       var proxy = { val: 0 };
       gsap.to(proxy, {
         val: target,
-        duration: 1.3,
+        duration: 1.1,
         ease: "power2.out",
         scrollTrigger: { trigger: el, start: "top 85%", once: true },
         onUpdate: function () {
           el.textContent = prefix + Math.round(proxy.val) + suffix;
+        },
+        onComplete: function () {
+          gsap.to(el, { scale: 1.06, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: -1 });
         }
       });
     });
