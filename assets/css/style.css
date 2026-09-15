@@ -399,17 +399,31 @@ p { margin: 0; }
 .section-head { max-width: 700px; margin-bottom: 56px; }
 .section-head .lede { color: var(--muted); font-size: 1.1rem; margin-top: 16px; max-width: 60ch; }
 
-/* -------- statement / manifesto -------- */
-.statement { padding-block: 130px; text-align: center; }
+/* -------- statement / manifesto (cinematic scroll set-piece) -------- */
+.statement {
+  padding-block: 130px; text-align: center;
+  background-color: var(--bg); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  will-change: background-color;
+}
 .statement blockquote {
   margin: 0 auto; max-width: 20ch;
   font-family: var(--font-display); font-weight: 700;
   font-size: clamp(2.2rem, 1.5rem + 3.5vw, 4.4rem); line-height: 1.05;
+  color: var(--ink);
+  will-change: transform, color;
 }
 .statement blockquote em { color: var(--blue); font-style: normal; }
 .statement cite {
   display: block; margin-top: 28px; font-family: var(--font-mono); font-weight: 500; font-style: normal;
   font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  will-change: color;
+}
+
+/* full-viewport camera-flash burst, fired once per statement entry */
+.flash-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: #fff; opacity: 0; pointer-events: none;
 }
 
 /* -------- spotlight (SEO / SEM) -------- */

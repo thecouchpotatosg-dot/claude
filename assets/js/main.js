@@ -231,6 +231,55 @@
       });
     });
 
+    /* ---------- cinematic pinned "flash" on every manifesto statement ---------- */
+    // a camera-flash burst fired once per entry, shared across all of them
+    var flash = document.createElement("div");
+    flash.className = "flash-overlay";
+    document.body.appendChild(flash);
+    var fireFlash = function (target) {
+      gsap.killTweensOf(flash);
+      gsap.fromTo(flash, { opacity: 0.85 }, { opacity: 0, duration: 0.5, ease: "power2.out" });
+      if (target) {
+        gsap.killTweensOf(target, "x");
+        gsap.fromTo(target, { x: -7 }, {
+          x: 7, duration: 0.055, repeat: 5, yoyo: true, ease: "power1.inOut",
+          onComplete: function () { gsap.set(target, { x: 0 }); }
+        });
+      }
+    };
+
+    document.querySelectorAll(".statement").forEach(function (el) {
+      var quote = el.querySelector("blockquote");
+      var em = el.querySelector("blockquote em");
+      var cite = el.querySelector("cite");
+      if (!quote) return;
+
+      // pin the section is on the section itself; only its own transform (scale)
+      // is touched here — the blockquote/cite keep their separate entrance tween
+      // untouched, since this timeline only ever sets color/backgroundColor on them.
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "+=120%",
+          scrub: 0.7,
+          pin: true,
+          anticipatePin: 1,
+          onEnter: function () { fireFlash(el); },
+          onEnterBack: function () { fireFlash(el); }
+        }
+      });
+      tl.to(el, { backgroundColor: "#EA2300", scale: 1.06, duration: 0.32, ease: "none" })
+        .to(quote, { color: "#ffffff", duration: 0.2 }, "<")
+        .to(cite, { color: "rgba(255,255,255,0.85)", duration: 0.2 }, "<");
+      if (em) tl.to(em, { color: "#ffffff", duration: 0.2 }, "<");
+      tl.to(el, { scale: 1.06, duration: 0.36 })
+        .to(el, { backgroundColor: "#ffffff", scale: 1, duration: 0.32, ease: "none" })
+        .to(quote, { color: "#14171F", duration: 0.2 }, "<")
+        .to(cite, { color: "#5B6270", duration: 0.2 }, "<");
+      if (em) tl.to(em, { color: "#EA2300", duration: 0.2 }, "<");
+    });
+
     // hero growth graph: draw the line, then pop the labels/dots in
     var graphLine = document.querySelector(".graph-line");
     if (graphLine) {
